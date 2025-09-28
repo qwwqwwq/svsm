@@ -262,7 +262,7 @@ pub const DEFAULT_PUBLIC_AREA: [u8; 398] = [
 
 // Template H-8: RSA-SSA 2048 (Signing)
 #[cfg(feature = "vtpm_H8_ek")]
-pub const DEFAULT_PUBLIC_AREA: [u8; 310] = [
+pub const DEFAULT_PUBLIC_AREA: [u8; 312] = [
     0x00, 0x01, // type TPM_ALG_RSA
     0x00, 0x0B, // nameAlg TPM_ALG_SHA256
     0x00, 0x03, 0x04, 0xb2, // objectAttributes { sign restricted adminWithPolicy
