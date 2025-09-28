@@ -36,12 +36,12 @@
 // TPMT_PUBLIC with TCG default EK template,
 // see Table 2: Default EK Template (TPMT_PUBLIC) L-1: RSA 2048 (Storage)
 // of TCG EK Credential Profile for TPM Family 2.0 Level 0 Version 2.6
-#[cfg(any(feature = "vtpm_L1", not(any(
-    feature = "vtpm_H1", feature = "vtpm_H2", feature = "vtpm_H3", feature = "vtpm_H4",
-    feature = "vtpm_H5", feature = "vtpm_H6", feature = "vtpm_H7", feature = "vtpm_H8",
-    feature = "vtpm_H9", feature = "vtpm_H10", feature = "vtpm_H11", feature = "vtpm_H12",
-    feature = "vtpm_H13", feature = "vtpm_H14", feature = "vtpm_H15", feature = "vtpm_H16",
-    feature = "vtpm_H17"
+#[cfg(any(feature = "vtpm_L1_ek", not(any(
+    feature = "vtpm_H1_ek", feature = "vtpm_H2_ek", feature = "vtpm_H3_ek", feature = "vtpm_H4_ek",
+    feature = "vtpm_H5_ek", feature = "vtpm_H6_ek", feature = "vtpm_H7_ek", feature = "vtpm_H8_ek",
+    feature = "vtpm_H9_ek", feature = "vtpm_H10_ek", feature = "vtpm_H11_ek", feature = "vtpm_H12_ek",
+    feature = "vtpm_H13_ek", feature = "vtpm_H14_ek", feature = "vtpm_H15_ek", feature = "vtpm_H16_ek",
+    feature = "vtpm_H17_ek"
 ))))]
 pub const DEFAULT_PUBLIC_AREA: [u8; 314] = [
     0x00, 0x01, // type TPM_ALG_RSA
@@ -78,7 +78,7 @@ pub const DEFAULT_PUBLIC_AREA: [u8; 314] = [
 ];
 
 // Template H-1: RSA 2048 (Storage)
-#[cfg(feature = "vtpm_H1")]
+#[cfg(feature = "vtpm_H1_ek")]
 pub const DEFAULT_PUBLIC_AREA: [u8; 314] = [
     0x00, 0x01, // type TPM_ALG_RSA
     0x00, 0x0B, // nameAlg TPM_ALG_SHA256
@@ -137,7 +137,7 @@ pub const DEFAULT_PUBLIC_AREA: [u8; 102] = [
 ];
 
 // Template H-3: ECC NIST P384 (Storage)
-#[cfg(feature = "vtpm_H3")]
+#[cfg(feature = "vtpm_H3_ek")]
 pub const DEFAULT_PUBLIC_AREA: [u8; 118] = [
     0x00, 0x18, // type TPM_ALG_ECC
     0x00, 0x0C, // nameAlg TPM_ALG_SHA384
@@ -160,7 +160,7 @@ pub const DEFAULT_PUBLIC_AREA: [u8; 118] = [
 ];
 
 // Template H-4: ECC NIST P521 (Storage)
-#[cfg(feature = "vtpm_H4")]
+#[cfg(feature = "vtpm_H4_ek")]
 pub const DEFAULT_PUBLIC_AREA: [u8; 134] = [
     0x00, 0x18, // type TPM_ALG_ECC
     0x00, 0x0D, // nameAlg TPM_ALG_SHA512
@@ -184,7 +184,7 @@ pub const DEFAULT_PUBLIC_AREA: [u8; 134] = [
 ];
 
 // Template H-5: ECC SM2 P256 (Storage)
-#[cfg(feature = "vtpm_H5")]
+#[cfg(feature = "vtpm_H5_ek")]
 pub const DEFAULT_PUBLIC_AREA: [u8; 102] = [
     0x00, 0x18, // type TPM_ALG_ECC
     0x00, 0x12, // nameAlg TPM_ALG_SM3_256
@@ -206,7 +206,7 @@ pub const DEFAULT_PUBLIC_AREA: [u8; 102] = [
 ];
 
 // Template H-6: RSA 3072 (Storage)
-#[cfg(feature = "vtpm_H6")]
+#[cfg(feature = "vtpm_H6_ek")]
 pub const DEFAULT_PUBLIC_AREA: [u8; 398] = [
     0x00, 0x01, // type TPM_ALG_RSA
     0x00, 0x0C, // nameAlg TPM_ALG_SHA384
@@ -261,7 +261,7 @@ pub const DEFAULT_PUBLIC_AREA: [u8; 398] = [
 ];
 
 // Template H-8: RSA-SSA 2048 (Signing)
-#[cfg(feature = "vtpm_H8")]
+#[cfg(feature = "vtpm_H8_ek")]
 pub const DEFAULT_PUBLIC_AREA: [u8; 310] = [
     0x00, 0x01, // type TPM_ALG_RSA
     0x00, 0x0B, // nameAlg TPM_ALG_SHA256
@@ -297,7 +297,7 @@ pub const DEFAULT_PUBLIC_AREA: [u8; 310] = [
 ];
 
 // Template H-9: RSA-PSS 2048 (Signing)
-#[cfg(feature = "vtpm_H9")]
+#[cfg(feature = "vtpm_H9_ek")]
 pub const DEFAULT_PUBLIC_AREA: [u8; 310] = [
     0x00, 0x01, // type TPM_ALG_RSA
     0x00, 0x0B, // nameAlg TPM_ALG_SHA256
@@ -333,7 +333,7 @@ pub const DEFAULT_PUBLIC_AREA: [u8; 310] = [
 ];
 
 // Template H-10: ECC NIST P256 (Signing)
-#[cfg(feature = "vtpm_H10")]
+#[cfg(feature = "vtpm_H10_ek")]
 pub const DEFAULT_PUBLIC_AREA: [u8; 100] = [
     0x00, 0x18, // type TPM_ALG_ECC
     0x00, 0x0B, // nameAlg TPM_ALG_SHA256
@@ -354,7 +354,7 @@ pub const DEFAULT_PUBLIC_AREA: [u8; 100] = [
 ];
 
 // Template H-11: ECC NIST P384 (Signing)
-#[cfg(feature = "vtpm_H11")]
+#[cfg(feature = "vtpm_H11_ek")]
 pub const DEFAULT_PUBLIC_AREA: [u8; 116] = [
     0x00, 0x18, // type TPM_ALG_ECC
     0x00, 0x0C, // nameAlg TPM_ALG_SHA384
@@ -376,7 +376,7 @@ pub const DEFAULT_PUBLIC_AREA: [u8; 116] = [
 ];
 
 // Template H-12: ECC NIST P521 (Signing)
-#[cfg(feature = "vtpm_H12")]
+#[cfg(feature = "vtpm_H12_ek")]
 pub const DEFAULT_PUBLIC_AREA: [u8; 132] = [
     0x00, 0x18, // type TPM_ALG_ECC
     0x00, 0x0D, // nameAlg TPM_ALG_SHA512
