@@ -265,7 +265,9 @@
 pub const DEFAULT_PUBLIC_AREA: [u8; 312] = [
     0x00, 0x01, // type TPM_ALG_RSA
     0x00, 0x0B, // nameAlg TPM_ALG_SHA256
-    0x00, 0x03, 0x04, 0xb2, // objectAttributes { sign restricted adminWithPolicy
+    0x00, 0x05, 0x00, 0xf2, // objectAttributes { sign restricted adminWithPolicy userWithAuth
+                            // sensitiveDataOrigin fixedParent fixedTpm }
+    //   0x00, 0x03, 0x04, 0xb2, // objectAttributes { sign restricted adminWithPolicy
     // sensitiveDataOrigin fixedParent fixedTpm }
     0x00, 0x20, // authPolicy PolicyBSHA256 (32 bytes)
     0xCA, 0x3D, 0x0A, 0x99, 0xA2, 0xB9, 0x39, 0x06, 0xF7, 0xA3, 0x34, 0x24, 0x14, 0xEF, 0xCF, 0xB3,
