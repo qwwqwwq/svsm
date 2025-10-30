@@ -40,8 +40,6 @@
     feature = "vtpm_H1_ek", feature = "vtpm_H2_ek", feature = "vtpm_H3_ek", feature = "vtpm_H4_ek",
     feature = "vtpm_H5_ek", feature = "vtpm_H6_ek", feature = "vtpm_H7_ek", feature = "vtpm_H8_ek",
     feature = "vtpm_H9_ek", feature = "vtpm_H10_ek", feature = "vtpm_H11_ek", feature = "vtpm_H12_ek",
-    feature = "vtpm_H13_ek", feature = "vtpm_H14_ek", feature = "vtpm_H15_ek", feature = "vtpm_H16_ek",
-    feature = "vtpm_H17_ek"
 ))))]
 pub const DEFAULT_PUBLIC_AREA: [u8; 314] = [
     0x00, 0x01, // type TPM_ALG_RSA
@@ -115,7 +113,7 @@ pub const DEFAULT_PUBLIC_AREA: [u8; 314] = [
 ];
 
 // Template H-2: ECC NIST P256 (Storage)
-#[cfg(feature = "vtpm_H2")]
+#[cfg(feature = "vtpm_H2_ek")]
 pub const DEFAULT_PUBLIC_AREA: [u8; 102] = [
     0x00, 0x18, // type TPM_ALG_ECC
     0x00, 0x0B, // nameAlg TPM_ALG_SHA256
