@@ -10,6 +10,8 @@ ifneq ($(FEATURES_TEST),)
 SVSM_ARGS_TEST += --features ${FEATURES_TEST}
 endif
 
+TEST_ARGS ?=
+
 CLIPPY_OPTIONS ?=
 CLIPPY_ARGS ?= -D warnings
 
@@ -46,8 +48,6 @@ BUILD_FW = --firmware ${FW_FILE}
 else
 BUILD_FW =
 endif
-
-C_BIT_POS ?= 51
 
 IGVM_FILES = bin/coconut-qemu.igvm bin/coconut-hyperv.igvm bin/coconut-vanadium.igvm
 IGVMBUILDER = "target/${TARGET_PATH}/igvmbuilder"
@@ -114,8 +114,8 @@ test:
 
 test-igvm: bin/coconut-test-qemu.igvm bin/coconut-test-hyperv.igvm bin/coconut-test-vanadium.igvm
 
-test-in-svsm: utils/cbit bin/coconut-test-qemu.igvm $(IGVMMEASUREBIN)
-	./scripts/test-in-svsm.sh
+test-in-svsm: bin/coconut-test-qemu.igvm $(IGVMMEASUREBIN)
+	./scripts/test-in-svsm.sh $(TEST_ARGS)
 
 test-in-hyperv: bin/coconut-test-hyperv.igvm
 
@@ -131,17 +131,14 @@ docsite:
 docsite-serve:
 	mkdocs serve -f Documentation/mkdocs.yml
 
-utils/gen_meta: utils/gen_meta.c
+bin/gen_meta: utils/gen_meta.c bin
 	cc -O3 -Wall -o $@ $<
 
-utils/print-meta: utils/print-meta.c
+bin/print-meta: utils/print-meta.c bin
 	cc -O3 -Wall -o $@ $<
 
-utils/cbit: utils/cbit.c
-	cc -O3 -Wall -o $@ $<
-
-bin/meta.bin: utils/gen_meta utils/print-meta bin
-	./utils/gen_meta $@
+bin/meta.bin: bin/gen_meta bin/print-meta bin
+	./bin/gen_meta $@
 
 bin/stage2.bin: bin
 	cargo build --package svsm --bin stage2 ${CARGO_ARGS} --target=x86_64-unknown-none
@@ -202,11 +199,9 @@ clippy:
 
 clean:
 	cargo clean
-	rm -f stage1/*.o stage1/*.bin stage1/*.elf
-	rm -f utils/gen_meta utils/print-meta
 	rm -rf bin
+	rm -f release/src/git_version.rs
 
 distclean: clean
-	$(MAKE) -C libtcgtpm $@
 
 .PHONY: test clean clippy bin/stage2.bin bin/svsm-kernel.elf bin/test-kernel.elf stage1_elf_full stage1_elf_trampoline stage1_elf_test distclean $(APROXYBIN) $(IGVM_FILES)

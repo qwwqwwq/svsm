@@ -1,6 +1,17 @@
 site_name: COCONUT-SVSM
 theme:
   name: material
+  features:
+    - content.code.copy
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
 
 nav:
   - Documentation Home: 'index.md'
@@ -16,4 +27,5 @@ nav:
     - Fuzzing: 'developer/FUZZING.md'
     - Contributing to COCONUT-SVSM: 'developer/CONTRIBUTING.md'
     - Formal Verification: 'developer/VERIFICATION.md'
+    - Attestation: 'developer/ATTESTATION.md'
   - 'COCONUT-SVSM Rustdoc': 'rustdoc/svsm'

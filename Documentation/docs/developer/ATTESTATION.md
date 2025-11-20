@@ -96,71 +96,61 @@ To try for yourself, we provide a test KBS server that requires no configuration
 and simply indicates if attestation was successful or not. This requires a
 SEV-SNP machine with an SVSM-enabled kernel.
 
-1. Clone and run the `kbs-test` server used for testing. Supply two arguments
-   on the command line:
+1. Clone and run the `kbs-test` server used for testing. Supply the following
+   argument on the command line:
 
-   `--measurement`: base64-encoded expected launch measurement (64 bytes in size).
-   `--secret`: base64-encoded secret to be released upon successful attestation.
+    * `--measurement`: hex-encoded expected launch measurement (64 bytes in size).
 
     ```shell
     # SVSM=<path to your Coconut SVSM directory>
     git clone https://github.com/coconut-svsm/kbs-test.git
     cd kbs-test
     MEASUREMENT="$(${SVSM}/bin/igvmmeasure --check-kvm ${SVSM}/bin/coconut-qemu.igvm measure -b)"
-    BASE64_EXPECTED_MEASUREMENT="$(echo $MEASUREMENT | xxd -r -p | base64 -w 0)"
-    BASE64_SECRET="$(echo HelloWorld | base64 -w 0)"
-    cargo run -- --measurement $BASE64_EXPECTED_MEASUREMENT --secret $BASE64_SECRET
+    HEX_EXPECTED_MEASUREMENT="$(echo $MEASUREMENT | xxd -p)"
+    cargo run -- --measurement $HEX_EXPECTED_MEASUREMENT
     ```
-
-    Note that the `--secret` argument is unused for this demo, but **can** be used
-    with small modifications.
-
     This will run the `kbs-test` server at <http://0.0.0.0:8080>.
 
 2. Clone and build SVSM
 
-    ```text
-    $ git clone https://github.com/coconut-svsm/svsm.git
-    
-    ... build OVMF, qemu, SVSM IGVM, etc...
-    
-    $ FW_FILE=... make FEATURES=attest
+    ```shell
+    git clone https://github.com/coconut-svsm/svsm.git
+    # ... build OVMF, qemu, SVSM IGVM, etc...
+    FW_FILE=... make FEATURES=attest
     ```
 
 3. Run the proxy on the host
 
-   ```shell
-   cd svsm
-   make aproxy
-   bin/aproxy --protocol kbs-test \ 
-              --url http://0.0.0.0:8080 \
-              --unix /tmp/svsm-proxy.sock \
-              --force
-   ```
+    ```shell
+    cd svsm
+    make aproxy
+    bin/aproxy --protocol kbs-test \
+               --url http://0.0.0.0:8080 \
+               --unix /tmp/svsm-proxy.sock \
+               --force
+    ```
+    This runs the proxy with the following specified in the arguments:
 
-   This runs the proxy with the following specified in the arguments:
-
-   - `--url http://0.0.0.0:8080`: The attestation server is running at
-     `http://0.0.0.0:8080`.
-   - `--protocol kbs-test`: The attestation server communicates via the KBS
-     protocol, configure the backend to use the KBS protocol.
-   - `--unix /tmp/svsm-proxy.sock`: Listen for messages from SVSM on a socket
-     created in file `/tmp/svsm-proxy-sock`.
-   - `--force`: Remove the `/tmp/svsm-proxy.sock` file (if it already exists)
-     before creating the socket.
+     * `--url http://0.0.0.0:8080`: The attestation server is running at
+       `http://0.0.0.0:8080`.
+     * `--protocol kbs-test`: The attestation server communicates via the KBS
+       protocol, configure the backend to use the KBS protocol.
+     * `--unix /tmp/svsm-proxy.sock`: Listen for messages from SVSM on a socket
+       created in file `/tmp/svsm-proxy-sock`.
+     * `--force`: Remove the `/tmp/svsm-proxy.sock` file (if it already exists)
+       before creating the socket.
 
 4. Run a guest with SVSM
 
-   Initially, SVSM communicates over the COM3 serial port. The attestation proxy
-   socket will need to be available in the correct `-serial` argument position to
-   ensure it communicates with the right socket.
+    Initially, SVSM communicates over the COM3 serial port. The attestation proxy
+    socket will need to be available in the correct `-serial` argument position to
+    ensure it communicates with the right socket.
 
-   ```shell
-   ./scripts/launch_guest.sh --qemu $QEMU \
-                             --image $QCOW2 \
-                             --aproxy /tmp/svsm-proxy.sock
+    ```shell
+    ./scripts/launch_guest.sh --qemu $QEMU \
+                              --image $QCOW2 \
+                              --aproxy /tmp/svsm-proxy.sock
     ```
-
     If successful, you should be able to find a message indicating a successful
     attestation within the SVSM boot logs.
 
@@ -190,8 +180,8 @@ SEV-SNP machine with an SVSM-enabled kernel.
 
     ```text
     launch measurement not as expected
-    expected:"abcdaab+7GuPU52efdhq3PtvEcQpXl1lmnop75WQ1lzvgGz0Xmyyt9SSGoJImshp"
-    found:"fNcbjTk+7GuPU52wSQ6q3PtvEcQpXl1KXOzV75WQ1lzvgGz0Xmyyt9SSGoJImshp"
+    expected:"ef638e43239d319025e23c766c440c6f3e51660c2960bfc7045d30aee840f3981b15e4db8c6c7395dcdda91d005c6fe9"
+    found:"9ef6c500d19addcd5937c6c8bd4e51b1893f048eea03d5407cfb0692c06615e3f6c044c667c32e520913d93234e836fe"
     ```
 
     Restart the server process giving the `found` launch measurement in the
@@ -200,5 +190,5 @@ SEV-SNP machine with an SVSM-enabled kernel.
 
     ```shell
     cd kbs-test
-    cargo run -- --measurement fNcbjTk+7GuPU52wSQ6q3PtvEcQpXl1KXOzV75WQ1lzvgGz0Xmyyt9SSGoJImshp --secret $BASE64_SECRET
+    cargo run -- --measurement 9ef6c500d19addcd5937c6c8bd4e51b1893f048eea03d5407cfb0692c06615e3f6c044c667c32e520913d93234e836fe
     ```
